@@ -104,3 +104,7 @@
 - System architecture iteration and benchmark profiling.
 - Invariant verification for offline-first spreadsheet sync queue.
 
+## Milestone #27 — 2026-08-31
+- System architecture iteration and benchmark profiling.
+- Invariant verification for offline-first spreadsheet sync queue.
+
