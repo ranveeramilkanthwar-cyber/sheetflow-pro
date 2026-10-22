@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SheetFlow Pro — Cloud Spreadsheet Financial Tracker</title>
+  <meta name="description" content="Ultra-aesthetic financial expense & income tracker with EWMA burn-rate AI forecasting, 50/30/20 rule, and cloud spreadsheet sync.">
+  <meta name="theme-color" content="#070B14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Main Design System Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Ambient Floating Glow Orbs for Atmosphere -->
+  <div class="ambient-glow-wrapper" aria-hidden="true">
+    <div class="ambient-glow ambient-glow-1"></div>
+    <div class="ambient-glow ambient-glow-2"></div>
+  </div>
+
+  <!-- App Main Container -->
+  <main class="app-container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand-section">
+        <img src="assets/logo.png" alt="SheetFlow Logo" class="brand-logo" width="38" height="38">
+        <div class="brand-text">
+          <h1>SheetFlow Pro</h1>
+          <span class="brand-badge">Cloud Sheet Bridge</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <!-- 1-Tap Paste UPI SMS Button -->
+        <button id="pasteSmsBtn" class="icon-btn" title="Paste & Parse UPI SMS" aria-label="Paste UPI SMS">
+          <span style="font-size: 1.05rem;">✨</span>
+        </button>
+
+        <!-- Theme Switcher Button -->
+        <button id="themeBtn" class="icon-btn" title="Aesthetic Themes" aria-label="Change Theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>
+          </svg>
+        </button>
+
+        <!-- Sound FX Toggle Button -->
+        <button id="soundBtn" class="icon-btn" title="Toggle Sound FX" aria-label="Toggle Sound">
+          <svg id="soundIconOn" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg id="soundIconOff" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <!-- Setup Guide Button -->
+        <button id="guideBtn" class="icon-btn" title="Cloud Setup Guide" aria-label="Setup Guide">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </button>
+
+        <!-- Webhook Settings Button -->
+        <button id="settingsBtn" class="icon-btn" title="Webhook Settings" aria-label="Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+
+        <!-- Live Sync Button -->
+        <button id="syncBtn" class="icon-btn" title="Sync with Cloud Sheet" aria-label="Sync with Cloud Sheet">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Cloud Sync Status Banner -->
+    <div class="sync-banner">
+      <div class="sync-status">
+        <span id="syncStatusDot" class="status-dot"></span>
+        <span id="syncStatusText">Checking cloud connection...</span>
+      </div>
+      <a href="javascript:void(0)" id="guideBannerLink" class="sync-link" onclick="document.getElementById('guideBtn').click()">
+        How to connect ➔
+      </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      
+      <!-- 3-Tier Master Navigation Bar -->
+      <nav class="view-tabs" aria-label="Views">
+        <button id="tabCommand" class="tab-btn active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+          Command
+        </button>
+        <button id="tabIntelligence" class="tab-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Intelligence
+        </button>
+        <button id="tabLedger" class="tab-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          Excel Ledger
+        </button>
+      </nav>
+
+      <!-- ==================================================================
+           VIEW 1: COMMAND DASHBOARD
+           ================================================================== -->
+      <section id="commandView">
+        
+        <!-- Hero Dynamic Safe-To-Spend Card -->
+        <section class="glass-card dashboard-card" aria-label="Financial Summary">
+          <div class="dashboard-header">
+            <span class="dashboard-label">DYNAMIC SAFE-TO-SPEND TODAY</span>
+            <button id="budgetPill" class="budget-pill" title="Click to change monthly budget">
+              Limit: ₹15,000 ✎
+            </button>
+          </div>
+
+          <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+            <div id="dailySpendVal" class="daily-spend-value">₹0</div>
+            <div id="ewmaVelocityPill" style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">
+              EWMA Burn: ₹0/day
+            </div>
+          </div>
+          <div id="dailySubtext" class="daily-spend-subtext">Calculating remaining monthly pace...</div>
+
+          <!-- Budget Utilization Progress Bar -->
+          <div class="progress-container">
+            <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+          </div>
+
+          <!-- Three Key Metrics: Spent, Remaining, Income -->
+          <div class="stats-row">
+            <div class="stat-box">
+              <span class="stat-label">Total Spent</span>
+              <span id="statSpent" class="stat-value spent">₹0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Remaining</span>
+              <span id="statRemaining" class="stat-value remaining">₹0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Total Income</span>
+              <span id="statIncome" class="stat-value income">₹0</span>
+            </div>
+          </div>
+
+          <!-- Income Cashflow Pool Card -->
+          <div class="income-pool-card">
+            <div class="pool-left">
+              <span class="pool-label">Income Cashflow</span>
+              <span id="incomePoolText" class="pool-val">₹0 Unspent</span>
+              <span id="incomePoolSub" class="pool-sub">₹0 spent from income</span>
+            </div>
+            <div style="text-align: right;">
+              <span class="pool-label">Other / Savings</span>
+              <div id="statSpentOther" style="color: var(--warning); font-weight: 800; font-size: 1rem;">₹0</div>
+              <span class="pool-sub">spent from other</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 1-Tap Instant Micro-Expense Chips -->
+        <div class="quick-log-wrapper" style="margin-top: 18px;">
+          <div class="quick-log-header">⚡ 1-Tap Quick Log (Instant 0ms Save)</div>
+          <div class="quick-log-scroll">
+            <button class="quick-log-chip" data-amt="20" data-cat="Food & Drinks" data-note="Chai">☕ Chai ₹20</button>
+            <button class="quick-log-chip" data-amt="40" data-cat="Transport & Fuel" data-note="Auto">🛺 Auto ₹40</button>
+            <button class="quick-log-chip" data-amt="60" data-cat="Food & Drinks" data-note="Snacks">🍱 Snack ₹60</button>
+            <button class="quick-log-chip" data-amt="150" data-cat="Groceries" data-note="Quick Grocery">🛒 Groceries ₹150</button>
+          </div>
+        </div>
+
+        <!-- Segmented Filter Bar: All / Expenses / Income -->
+        <div class="filter-segmented" style="margin-top: 14px;">
+          <button id="filterAll" class="filter-pill active" data-filter="All">
+            <span>All</span>
+            <span id="badgeCountAll" class="count-badge">0</span>
+          </button>
+          <button id="filterExpense" class="filter-pill expense" data-filter="Expense">
+            <span>💸 Expenses</span>
+            <span id="badgeCountExpense" class="count-badge">0</span>
+          </button>
+          <button id="filterIncome" class="filter-pill income" data-filter="Income">
+            <span>💰 Income</span>
+            <span id="badgeCountIncome" class="count-badge">0</span>
+          </button>
+        </div>
+
+        <div class="section-header" style="margin-top: 14px;">
+          <h2 id="sectionListTitle" class="section-title">
+            Recent Activity
+            <span id="txnCount" class="count-badge">0</span>
+          </h2>
+        </div>
+
+        <!-- Transactions Card Container -->
+        <div id="txnList" class="transactions-list">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Clean Slate Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <div class="empty-glow-card">
+            <div class="empty-icon-circle">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="2" y="5" width="20" height="14" rx="3"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+              </svg>
+            </div>
+            <h3 class="empty-title">Clean Financial Slate</h3>
+            <p class="empty-desc">
+              Zero clutter, zero dummy data. Log your first Income or Expense or tap ✨ to paste an SMS to activate live Safe-to-Spend calculations.
+            </p>
+            <div class="empty-actions">
+              <button id="emptyAddIncomeBtn" class="pill-btn income">
+                <span>💰</span> Add Income
+              </button>
+              <button id="emptyAddExpenseBtn" class="pill-btn expense">
+                <span>💸</span> Add Expense
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 2: INTELLIGENCE & FORECASTING
+           ================================================================== -->
+      <section id="intelligenceView" style="display: none;">
+        
+        <!-- Algorithm A: EWMA AI Month-End Forecast Card -->
+        <div class="forecast-card">
+          <div class="forecast-header">
+            <span class="forecast-title">
+              <span>🧠</span> EWMA AI MONTH-END FORECAST
+            </span>
+            <span id="forecastBadge" class="forecast-badge success">On Track</span>
+          </div>
+          <div id="forecastHeadline" class="forecast-headline">
+            Calculating forecast...
+          </div>
+          <div id="forecastSub" class="forecast-sub">
+            Projected Month-End Spend: ₹0
+          </div>
+        </div>
+
+        <!-- Algorithm E: 50 / 30 / 20 Budget Rule Allocation -->
+        <div class="glass-card bucket-card">
+          <div class="chart-header">
+            <span>50 / 30 / 20 Budget Rule Allocation</span>
+          </div>
+          
+          <!-- Needs Row (50%) -->
+          <div class="bucket-row">
+            <div class="bucket-meta">
+              <span>Needs (Target 50%)</span>
+              <span id="needsMeta" style="color: var(--primary);">₹0 / ₹7,500</span>
+            </div>
+            <div class="bucket-track">
+              <div id="needsProgress" class="bucket-fill" style="width: 0%; background: #38BDF8;"></div>
+            </div>
+          </div>
+
+          <!-- Wants Row (30%) -->
+          <div class="bucket-row">
+            <div class="bucket-meta">
+              <span>Wants (Target 30%)</span>
+              <span id="wantsMeta" style="color: #C084FC;">₹0 / ₹4,500</span>
+            </div>
+            <div class="bucket-track">
+              <div id="wantsProgress" class="bucket-fill" style="width: 0%; background: #A855F7;"></div>
+            </div>
+          </div>
+
+          <!-- Savings Row (20%) -->
+          <div class="bucket-row">
+            <div class="bucket-meta">
+              <span>Investments / Savings (Target 20%)</span>
+              <span id="savingsMeta" style="color: var(--income);">₹0 / ₹3,000</span>
+            </div>
+            <div class="bucket-track">
+              <div id="savingsProgress" class="bucket-fill" style="width: 0%; background: var(--income);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expense Category Breakdown -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <span>Expenses by Category</span>
+            <span id="totalSpentAnalytics" style="color: var(--expense); font-size: 0.95rem;">₹0</span>
+          </div>
+          <div id="categoryBreakdown" class="breakdown-bars">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Expense Source Split -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <span>Expense Source Split</span>
+          </div>
+          <div id="sourceBreakdown" class="breakdown-bars">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Income Sources Breakdown -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <span>Income by Category</span>
+            <span id="totalIncomeAnalytics" style="color: var(--income); font-size: 0.95rem;">₹0</span>
+          </div>
+          <div id="incomeBreakdown" class="breakdown-bars">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Payment Mode Distribution -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <span>Payment Mode Distribution</span>
+          </div>
+          <div id="modeBreakdown" class="breakdown-bars">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 3: SEARCHABLE EXCEL LEDGER
+           ================================================================== -->
+      <section id="ledgerView" class="ledger-view" style="display: none;">
+        
+        <!-- Search and Export Toolbar -->
+        <div class="filter-bar">
+          <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="ledgerSearchInput" class="search-input" placeholder="Search ledger by note, category, bucket, UPI...">
+          </div>
+          <button id="quickExportCsvBtn" class="icon-btn" title="Export Ledger to CSV" aria-label="Export CSV">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          </button>
+        </div>
+
+        <!-- Master Spreadsheet Table -->
+        <div class="ledger-table-wrapper">
+          <table class="ledger-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Bucket</th>
+                <th>Amount</th>
+                <th>Mode</th>
+                <th>Source</th>
+                <th>Notes</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Floating Action Button (FAB) -->
+    <div class="fab-container">
+      <button id="addFabBtn" class="fab-btn" aria-label="Add Transaction">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Add Entry</span>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ======================================================================
+       Modals & Sheets
+       ====================================================================== -->
+
+  <!-- Add Transaction Modal -->
+  <div id="addModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="addModalTitle">
+    <div class="modal-sheet">
+      <div class="sheet-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <h3 id="addModalTitle" class="sheet-title">New Entry</h3>
+          <span id="smsParsedBadge" style="display: none; background: rgba(56, 189, 248, 0.15); color: var(--primary); font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-full);">
+            ✨ Parsed from SMS
+          </span>
+        </div>
+        <button id="closeAddModalBtn" class="close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <!-- Type Toggle: Expense / Income -->
+      <div class="type-toggle-group">
+        <button id="typeToggleExpense" type="button" class="type-toggle-btn active expense">
+          <span>💸</span> Expense
+        </button>
+        <button id="typeToggleIncome" type="button" class="type-toggle-btn">
+          <span>💰</span> Income
+        </button>
+      </div>
+
+      <!-- Amount Input -->
+      <div class="amount-input-wrapper">
+        <span id="currencySymbolPrefix" class="currency-symbol">₹</span>
+        <input type="number" id="amountInput" class="amount-input" placeholder="0" inputmode="decimal" step="any">
+      </div>
+
+      <!-- Quick Amount Presets -->
+      <div class="quick-amounts">
+        <button type="button" class="quick-chip" data-amount="50">+50</button>
+        <button type="button" class="quick-chip" data-amount="100">+100</button>
+        <button type="button" class="quick-chip" data-amount="200">+200</button>
+        <button type="button" class="quick-chip" data-amount="500">+500</button>
+        <button type="button" class="quick-chip" data-amount="2000">+2,000</button>
+      </div>
+
+      <!-- Notes with Live Auto-Categorization Feedback -->
+      <div style="margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label class="input-label" for="notesInput" style="margin-bottom: 0;">Notes / Merchant</label>
+          <span id="autoTagFeedback" style="font-size: 0.72rem; color: var(--primary); font-weight: 600;"></span>
+        </div>
+        <input type="text" id="notesInput" class="form-control" placeholder="Type note (e.g. Zomato, Auto, Swiggy, Chai) - Auto-tags!">
+      </div>
+
+      <!-- Money Spent From (Only for Expense) -->
+      <div id="sourceSelectorSection">
+        <span class="input-label">Money Spent From:</span>
+        <div class="source-toggle-group">
+          <button type="button" id="sourceBtnIncome" class="source-toggle-btn selected income">
+            <span>💰 Current Income</span>
+            <small>Deducted from income</small>
+          </button>
+          <button type="button" id="sourceBtnOther" class="source-toggle-btn">
+            <span>🏦 Other / Savings</span>
+            <small>Savings, credit, or external</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Chips -->
+      <span id="categoryInputLabel" class="input-label">Expense Category</span>
+      <div id="categoryChipsContainer" class="category-chips">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Payment Mode & Date -->
+      <div class="form-row">
+        <div>
+          <span class="input-label">Payment Mode</span>
+          <div id="modeSelector" class="mode-selector">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+        <div>
+          <label class="input-label" for="dateInput">Date (Optional)</label>
+          <input type="datetime-local" id="dateInput" class="form-control">
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button id="saveTxnBtn" type="button" class="btn-primary">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Save Entry
+      </button>
+    </div>
+  </div>
+
+  <!-- Aesthetic Theme Switcher Modal -->
+  <div id="themeModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-sheet" style="max-width: 440px;">
+      <div class="sheet-header">
+        <h3 class="sheet-title">Aesthetic Themes</h3>
+        <button id="closeThemeModalBtn" class="close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px;">
+        Pick your favorite curated luxury dark atmosphere:
+      </p>
+
+      <div class="theme-grid">
+        <div class="theme-card active" data-set-theme="midnight">
+          <div class="theme-swatch" style="background: linear-gradient(135deg, #38BDF8, #818CF8);"></div>
+          <div>
+            <div class="theme-name">Midnight</div>
+            <small style="color: var(--text-muted); font-size: 0.7rem;">Cyan & Indigo</small>
+          </div>
+        </div>
+
+        <div class="theme-card" data-set-theme="aurora">
+          <div class="theme-swatch" style="background: linear-gradient(135deg, #10B981, #34D399);"></div>
+          <div>
+            <div class="theme-name">Cyber Aurora</div>
+            <small style="color: var(--text-muted); font-size: 0.7rem;">Emerald & Mint</small>
+          </div>
+        </div>
+
+        <div class="theme-card" data-set-theme="sunset">
+          <div class="theme-swatch" style="background: linear-gradient(135deg, #F43F5E, #FB923C);"></div>
+          <div>
+            <div class="theme-name">Sunset Velvet</div>
+            <small style="color: var(--text-muted); font-size: 0.7rem;">Rose & Peach</small>
+          </div>
+        </div>
+
+        <div class="theme-card" data-set-theme="frost">
+          <div class="theme-swatch" style="background: linear-gradient(135deg, #38BDF8, #93C5FD);"></div>
+          <div>
+            <div class="theme-name">Nordic Frost</div>
+            <small style="color: var(--text-muted); font-size: 0.7rem;">Ice Blue & Slate</small>
+          </div>
+        </div>
+
+        <div class="theme-card" data-set-theme="luxury" style="grid-column: span 2;">
+          <div class="theme-swatch" style="background: linear-gradient(135deg, #FACC15, #CA8A04);"></div>
+          <div>
+            <div class="theme-name">Luxury Onyx</div>
+            <small style="color: var(--text-muted); font-size: 0.7rem;">Champagne Gold & Bronze</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Budget Modal -->
+  <div id="budgetModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-sheet" style="max-width: 420px;">
+      <div class="sheet-header">
+        <h3 class="sheet-title">Monthly Spending Limit</h3>
+        <button id="closeBudgetModalBtn" class="close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">
+        The Dynamic Self-Healing algorithm automatically balances your budget with a 1.35x weekend multiplier.
+      </p>
+      <div class="amount-input-wrapper">
+        <span class="currency-symbol">₹</span>
+        <input type="number" id="budgetInput" class="amount-input" placeholder="15000">
+      </div>
+      <button id="saveBudgetBtn" type="button" class="btn-primary">
+        Update Spending Limit
+      </button>
+    </div>
+  </div>
+
+  <!-- Webhook Settings Modal -->
+  <div id="settingsModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-sheet">
+      <div class="sheet-header">
+        <h3 class="sheet-title">Webhook & Settings</h3>
+        <button id="closeSettingsModalBtn" class="close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <!-- Webhook Bridge URL Input -->
+      <div style="margin-bottom: 18px;">
+        <label class="input-label" for="webhookUrlInput">Google Apps Script or n8n Webhook URL</label>
+        <input type="url" id="webhookUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button id="testWebhookBtn" type="button" class="tab-btn" style="border: 1px solid var(--card-border);">
+            🧪 Test URL
+          </button>
+          <button id="saveWebhookBtn" type="button" class="tab-btn active" style="flex: 2;">
+            💾 Save Webhook URL
+          </button>
+        </div>
+      </div>
+
+      <!-- Currency Selection -->
+      <div style="margin-bottom: 20px;">
+        <label class="input-label" for="currencySelect">Display Currency</label>
+        <select id="currencySelect" class="form-control">
+          <option value="INR">₹ INR (Indian Rupee)</option>
+          <option value="USD">$ USD (US Dollar)</option>
+          <option value="EUR">€ EUR (Euro)</option>
+          <option value="GBP">£ GBP (British Pound)</option>
+          <option value="AED">د.إ AED (UAE Dirham)</option>
+        </select>
+      </div>
+
+      <!-- Backup / Export Tools -->
+      <div style="margin-bottom: 20px;">
+        <span class="input-label">Data Backup & Export</span>
+        <div style="display: flex; gap: 8px;">
+          <button id="exportCsvBtn" type="button" class="tab-btn" style="border: 1px solid var(--card-border);">
+            📥 Export CSV
+          </button>
+          <button id="exportJsonBtn" type="button" class="tab-btn" style="border: 1px solid var(--card-border);">
+            📦 Export JSON
+          </button>
+        </div>
+        <label class="tab-btn" style="margin-top: 8px; border: 1px dashed var(--card-border); cursor: pointer; text-align: center;">
+          📤 Import JSON Backup
+          <input type="file" id="importJsonInput" accept=".json" style="display: none;">
+        </label>
+      </div>
+
+      <button id="clearDataBtn" type="button" class="tab-btn" style="width: 100%; color: var(--expense); border: 1px solid var(--expense-border);">
+        🗑️ Clear Local Cache & Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- Google Apps Script Setup Guide Modal (Enterprise 4-Tab Relational Architecture) -->
+  <div id="guideModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-sheet" style="max-width: 560px;">
+      <div class="sheet-header">
+        <h3 class="sheet-title">Enterprise Cloud Ledger Setup</h3>
+        <button id="closeGuideModalBtn" class="close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.85rem; color: #e2e8f0;">
+        <p>Connect your Sheet to the <strong>Enterprise 4-Tab Relational Architecture</strong> with idempotent batch upsert and deletion:</p>
+
+        <div>
+          <strong style="color: var(--primary);">1. Google Sheet Tab 1 (`Transactions`):</strong>
+          <p style="color: var(--text-muted); margin-top: 4px;">
+            Set Row 1 headers in your primary sheet tab:
+          </p>
+          <div class="code-block" style="padding: 8px 12px; margin-top: 6px;">
+            ID | Date | Type | Category | Bucket | Amount | Mode | Source | Notes
+          </div>
+        </div>
+
+        <div>
+          <strong style="color: var(--primary);">2. Upgraded Apps Script (Batch Sync & Delete with Source Support):</strong>
+          <p style="color: var(--text-muted); margin-top: 4px;">
+            In Google Sheets, go to <strong>Extensions ➔ Apps Script</strong>, paste this script, and click save:
+          </p>
+          <div class="code-block">
+            <button id="copyScriptBtn" class="copy-btn">📋 Copy Code</button>
+            <pre id="scriptCodeBlock"><code>function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Transactions");
+  var rows = sheet.getDataRange().getValues();
+  if (rows.length &lt;= 1) {
+    return ContentService.createTextOutput(JSON.stringify([])).setMimeType(ContentService.MimeType.JSON);
+  }
+  var headers = rows.shift();
+  var data = rows.map(function(r) {
+    return {
+      id: r[0].toString(),
+      date: r[1].toString(),
+      type: r[2].toString(),
+      category: r[3].toString(),
+      bucket: r[4].toString(),
+      amount: Number(r[5]),
+      mode: r[6].toString(),
+      source: r[7] ? r[7].toString() : (r[2] === 'Expense' ? 'Income' : 'Direct'),
+      notes: r[8] ? r[8].toString() : ''
+    };
+  }).reverse();
+  
+  return ContentService.createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+  
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Transactions");
+    var payload = JSON.parse(e.postData.contents);
+    var action = payload.action || "UPSERT";
+    var items = payload.items || [payload];
+    
+    var existingData = sheet.getDataRange().getValues();
+    var idMap = {};
+    for (var i = 1; i &lt; existingData.length; i++) {
+      idMap[existingData[i][0].toString()] = i + 1;
+    }
+
+    items.forEach(function(item) {
+      var rowIndex = idMap[item.id];
+      if (action === "DELETE" && rowIndex) {
+        sheet.deleteRow(rowIndex);
+      } else if (rowIndex) {
+        sheet.getRange(rowIndex, 1, 1, 9).setValues([[
+          item.id, item.date, item.type, item.category, item.bucket, item.amount, item.mode, item.source || 'Income', item.notes
+        ]]);
+      } else if (action !== "DELETE") {
+        sheet.appendRow([
+          item.id, item.date, item.type, item.category, item.bucket, item.amount, item.mode, item.source || 'Income', item.notes
+        ]);
+      }
+    });
+
+    return ContentService.createTextOutput(JSON.stringify({"status": "synced", "count": items.length}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <div>
+          <strong style="color: var(--primary);">3. Deploy as Web App:</strong>
+          <p style="color: var(--text-muted); margin-top: 4px;">
+            Click <strong>Deploy ➔ New Deployment</strong> ➔ Select <strong>Web App</strong>.<br>
+            • Execute as: <strong>Me</strong><br>
+            • Who has access: <strong>Anyone</strong><br>
+            • Copy the Web App URL and paste it into SheetFlow Settings!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/sound.js"></script>
+  <script src="js/brain.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
