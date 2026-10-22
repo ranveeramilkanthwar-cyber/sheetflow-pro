@@ -1,0 +1,4 @@
+{
+  "rules": ["HDFC", "SBI", "ICICI", "AXIS", "KOTAK", "UPI"],
+  "version": "1.2.0"
+}
