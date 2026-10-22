@@ -1,0 +1,4 @@
+{
+  "commands": ["add expense", "record payment", "split bill", "show balance"],
+  "lang": "en-IN"
+}
